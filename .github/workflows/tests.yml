@@ -1,0 +1,75 @@
+name: Automated tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 1 * * *" # daily 09:00 SGT: catches upstream API changes even without commits
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  api-contract:
+    name: API contract tests (data.gov.sg)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: tests/AirTemperature.Tests
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: "10.0.x"
+      - run: dotnet build
+      - name: Run API contract tests
+        env:
+          DATAGOV_API_KEY: ${{ secrets.DATAGOV_API_KEY }} # optional
+        run: dotnet test --no-build --filter "Category=Api" --logger "trx;LogFileName=api.trx"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: api-test-results
+          path: tests/AirTemperature.Tests/TestResults
+
+  e2e:
+    name: UI smoke tests (Playwright)
+    runs-on: ubuntu-24.04
+    # UI tests hit the live Personal Environment, so they run on demand and nightly, not on every PR.
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    defaults:
+      run:
+        working-directory: tests/AirTemperature.Tests
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: "10.0.x"
+      - run: dotnet build
+      # Chromium and its OS libraries are installed by the test project itself
+      # (E2E/PlaywrightBrowserSetup.cs, using --with-deps because CI=true on GitHub runners).
+      - name: Run UI smoke tests
+        env:
+          APP_BASE_URL: ${{ vars.APP_BASE_URL }}
+          APP_USERNAME: ${{ secrets.APP_USERNAME }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+        run: dotnet test --no-build --filter "Category=E2E" --logger "trx;LogFileName=e2e.trx"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: e2e-test-results
+          path: tests/AirTemperature.Tests/TestResults

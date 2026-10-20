@@ -1,0 +1,7 @@
+# checkov -d infra --config-file infra/.checkov.yaml   (from the repo root)
+# Skips are inline in the .tf files.
+framework:
+  - terraform
+compact: true
+quiet: true
+download-external-modules: false

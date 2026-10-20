@@ -1,0 +1,51 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# Real values (e.g. your IP) stay local; only the example is committed.
+*.tfvars
+!*.tfvars.example
+.terraformrc
+terraform.rc
+
+# Secrets / local config
+.env
+.env.*
+!.env.example
+*.pem
+*.pfx
+*.key
+
+# Node / Playwright
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+
+# .NET
+bin/
+obj/
+TestResults/
+*.user
+
+# Python
+.venv/
+__pycache__/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Visual Studio
+.vs/
