@@ -1,0 +1,6 @@
+# cp terraform.tfvars.example terraform.tfvars
+allowed_cidrs = ["203.0.113.10/32"]
+
+# instance_type          = "m6i.xlarge"
+# root_volume_gb         = 150
+# termination_protection = true

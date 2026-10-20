@@ -1,0 +1,76 @@
+/* =============================================================================
+   AirTemprature - theme stylesheet
+   Source of truth for the shared UI styles. Paste into Service Studio:
+   AirTemprature module > Interface > Themes > AirTemprature > Style Sheet.
+   Screen stylesheets keep only screen-specific rules (Dashboard: map + station card).
+   All classes use the "at-" prefix so they never clash with OutSystems UI.
+   Data-driven values (temperature colours, bar widths, hero gradient) are set
+   per widget as inline styles; the colour scale lives in GetTemperatureColor.
+   ============================================================================= */
+
+/* ---- Hero banner (Dashboard, Station Detail) ---- */
+.at-hero{border-radius:18px;padding:28px 32px;color:#fff;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;box-shadow:0 10px 30px rgba(15,23,42,.18);margin-bottom:20px}
+.at-hero-label{opacity:.85;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.at-hero-value{font-size:64px;font-weight:800;line-height:1.05;letter-spacing:-.02em}
+.at-hero-sub{opacity:.92;font-size:15px;margin-top:8px}
+.at-hero-right{text-align:right}
+.at-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font-size:13px;font-weight:700;background:rgba(255,255,255,.2);backdrop-filter:blur(4px)}
+.at-pill-light{background:#f1f5f9;color:#334155;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700}
+
+/* Live / stale indicator dot */
+.at-dot{width:9px;height:9px;border-radius:50%;background:#4ade80;animation:at-pulse 2s infinite}
+.at-dot.stale{background:#fbbf24;animation:none}
+@keyframes at-pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.75)}70%{box-shadow:0 0 0 9px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+
+/* ---- Cards and KPIs ---- */
+.at-card{background:#fff;border-radius:16px;padding:20px 22px;box-shadow:0 1px 3px rgba(15,23,42,.06);border:1px solid #edf0f5;height:100%}
+.at-accent{border-left:6px solid #94a3b8} /* colour overridden inline per KPI */
+.at-kpi-label{color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.at-kpi-value{font-size:30px;font-weight:800;margin-top:6px;color:#0f172a}
+.at-kpi-sub{color:#64748b;font-size:13px;margin-top:2px}
+
+/* ---- Sections ---- */
+.at-section{margin-top:20px}
+.at-section-title{font-weight:800;font-size:17px;color:#0f172a}
+.at-section-sub{color:#64748b;font-size:13px;margin:2px 0 14px}
+.at-muted{color:#64748b}
+.at-empty{text-align:center;padding:40px 20px;color:#64748b}
+.at-foot{color:#94a3b8;font-size:12px;margin-top:24px;text-align:center}
+
+/* ---- Ranking / list rows ---- */
+.at-row{display:grid;grid-template-columns:30px 1fr 76px;gap:12px;align-items:center;padding:10px 8px;border-bottom:1px solid #f1f5f9;color:inherit;text-decoration:none;border-radius:10px}
+.at-row:hover{background:#f8fafc;text-decoration:none}
+.at-rank{color:#94a3b8;font-weight:700;font-size:13px}
+.at-name{font-weight:700;color:#0f172a;font-size:14px}
+.at-bar{height:6px;border-radius:3px;background:#eef2f7;margin-top:6px;overflow:hidden}
+.at-bar-fill{height:100%;border-radius:3px} /* width + colour set inline */
+.at-badge{color:#fff;font-weight:800;border-radius:9px;padding:4px 0;text-align:center;font-size:14px}
+.at-time{color:#94a3b8;font-size:11px;text-align:center;margin-top:3px}
+.at-scroll{max-height:470px;overflow-y:auto;margin-top:8px}
+
+/* ---- Status tag (Sync History) ---- */
+.at-tag{display:inline-block;color:#fff;font-weight:700;font-size:12px;border-radius:999px;padding:3px 12px}
+
+/* ---- Colour legend ---- */
+.at-legend{display:flex;gap:4px;align-items:center;font-size:11px;color:#64748b;flex-wrap:wrap}
+.at-swatch{display:inline-block;width:26px;height:8px;border-radius:2px;margin:0 4px 0 8px}
+
+/* ---- Segmented control (Station Detail range) ----
+   The active state sits on the inner item: a class on the <a> is not re-applied on re-render. */
+.at-seg{display:inline-flex;background:#eef2f7;border-radius:12px;padding:4px;gap:2px}
+.at-seg a{text-decoration:none}
+.at-seg-item{padding:7px 16px;border-radius:9px;color:#334155;font-weight:700;font-size:13px;white-space:nowrap}
+.at-seg-item.active{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(15,23,42,.12)}
+.at-controls{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+
+/* ---- Header navigation ---- */
+.at-nav{display:flex;gap:20px;align-items:center}
+.at-nav a{font-weight:700;color:#475569;text-decoration:none}
+.at-nav a:hover{color:#0f172a}
+
+/* ---- Small screens ---- */
+@media (max-width:768px){
+  .at-hero-value{font-size:46px}
+  .at-hero{padding:22px}
+  .at-hero-right{text-align:left}
+}
